@@ -59,33 +59,3 @@ class Change_view implements Command {
     system.commands.add(this);
   }
 }
-
-class View {
-  ArrayList<Button> buttons = new ArrayList<Button>();
-  ArrayList<Widget> widgets = new ArrayList<Widget>();
-  View() {
-    system.add(this);
-  }
-  void add(Button button) {
-    this.buttons.add(button);
-  }
-  void add(Widget widget) {
-    this.widgets.add(widget);
-  }
-  void remove(Button button) {
-    this.buttons.remove(button);
-  }
-  void remove(Widget widget) {
-    this.widgets.remove(widget);
-  }
-  void display() {
-    for(Button button: this.buttons) {
-      button.display();
-    }
-    for(Widget widget: this.widgets) {
-      if(widget != null) {
-        widget.display();
-      }
-    }
-  }
-}

@@ -1,3 +1,9 @@
+interface Command {
+  boolean executed = false;
+  void execute();
+  void queue();
+}
+
 class Configure implements Command {
   Configure() {}
   void execute() {
@@ -26,4 +32,10 @@ class Fly implements Command {
   void queue() {
     system.commands.add(this);
   }
+}
+
+Button newButton(Command command, String text, color c, Point point, Dimensions dimensions) {
+  Button result = new Button(command,text,c,point,dimensions);
+  system.mouseListener.add(result);
+  return result;
 }

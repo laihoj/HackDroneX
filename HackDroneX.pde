@@ -13,6 +13,9 @@ View MAIN_MENU;
 View CONFIGURE_MENU;
 View FLIGHT_MENU;
 Dimensions BUTTON_DEFAULT_DIMENSIONS;
+Dimensions SLIDER_DEFAULT_DIMENSIONS;
+Dimensions JOYSTICK_DEFAULT_DIMENSIONS;
+int JOYSTICK_DEFAULT_RADIUS;
 Point TOP_LEFT;
 Point TOP_ONE_THIRDS;
 Point TOP_TWO_THIRDS;
@@ -21,9 +24,11 @@ void setup() {
   TOP_ONE_THIRDS = new Point(width/3,0);
   TOP_TWO_THIRDS = new Point(width*2/3,0);
   BUTTON_DEFAULT_DIMENSIONS = new Dimensions(width/3-1, 100);
-  frameRate(20);
+  SLIDER_DEFAULT_DIMENSIONS = new Dimensions(width / 10, height * 4 / 5);
+  JOYSTICK_DEFAULT_RADIUS = min(width,height)*2/3;
+  JOYSTICK_DEFAULT_DIMENSIONS = new Dimensions(JOYSTICK_DEFAULT_RADIUS,JOYSTICK_DEFAULT_RADIUS);
+  frameRate(120);
   fullScreen();
-  background(255, 128, 0);
   stroke(255);
   textSize(24);
   system = new System();
@@ -33,6 +38,9 @@ void setup() {
   CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, height/2)));
   FLIGHT_MENU = new View();
   FLIGHT_MENU.add(new TextBox("Flying", new Point(width/2, height/2)));
+  //FLIGHT_MENU.add(new Slider(new Point(50, 50), SLIDER_DEFAULT_DIMENSIONS));
+  FLIGHT_MENU.add(new Joystick(new Point(width*1/4,height/2), JOYSTICK_DEFAULT_DIMENSIONS));
+  FLIGHT_MENU.add(new Joystick(new Point(width*3/4,height/2), JOYSTICK_DEFAULT_DIMENSIONS));
   
   ACTION_BAR = new View();
   system.action_bar = ACTION_BAR;
