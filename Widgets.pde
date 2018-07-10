@@ -148,12 +148,14 @@ class Joystick extends Widget {
   float spring = 0.95;
   Point stick;
   float radius;
+  float innerRadius;
   PVector mouseDisplacement = new PVector(0,0);
   Joystick(Point point, Dimensions dimensions) {
     this.point = point;
     this.stick = new Point(point);
     this.dimensions = dimensions;
-    this.radius = dimensions.leveys * 0.2;
+    this.radius = dimensions.leveys / 2;
+    this.innerRadius = radius * 0.3;
   }
   void display() {
    stroke(0);
@@ -161,11 +163,11 @@ class Joystick extends Widget {
    point(point.x,point.y);
    ellipse(point.x,point.y,dimensions.korkeus,dimensions.leveys);
    if(selected) fill(125);
-   ellipse(stick.x,stick.y,radius,radius);
+   ellipse(stick.x,stick.y,innerRadius,innerRadius);
    line(point.x, point.y, stick.x, stick.y);
   }
   Boolean target(PVector mouse) {
-    return this.radius > this.stick.dist(mouse);
+    return this.innerRadius / 2 > this.stick.dist(mouse);
   }
   void click(PVector mouse) {
     super.click(mouse);
@@ -181,6 +183,13 @@ class Joystick extends Widget {
       this.stick = new Point(this.point);
     }
     super.release(mouse,dragment);
+  }
+  String toString() {
+    String res = "";
+    res += floor(-(min(max(point.x - stick.x,-radius),radius)  / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    res += ",";
+    res += floor(-(min(max(point.y - stick.y,-radius),radius) / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    return res;
   }
 }
 
