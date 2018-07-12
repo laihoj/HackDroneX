@@ -61,7 +61,6 @@ interface MouseActivities {
   void onPress();
   void onDrag(PVector mouse);
   void onRelease();
-  
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +89,7 @@ abstract class MouseObserver implements MouseActivities {
     }
   }
   void drag(PVector mouse) {
-    if(this.pressed) {
+    if(this.pressed && PVector.dist(new PVector(pmouseX, pmouseY), new PVector(mouseX, mouseY)) > 0) {
       this.onDrag(mouse);
     }
   }

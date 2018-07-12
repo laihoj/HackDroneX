@@ -26,9 +26,11 @@ Point TOP_LEFT;
 Point TOP_ONE_THIRDS;
 Point TOP_TWO_THIRDS;
 float OUTPUT_RANGE = 255;
+
+boolean flying = false;
 void setup() {
-  //printArray(Serial.list());
-  //myPort = new Serial(this, Serial.list()[0], 9600);
+  printArray(Serial.list());
+  myPort = new Serial(this, Serial.list()[0], 9600);
   TOP_LEFT = new Point(0,0);
   TOP_ONE_THIRDS = new Point(width/3,0);
   TOP_TWO_THIRDS = new Point(width*2/3,0);
@@ -47,13 +49,15 @@ void setup() {
   MAIN_MENU.add(new CheckBox(new Point(width/2, height/2 + 100), new Dimensions(100,100)));
   CONFIGURE_MENU = new View();
   CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, BUTTON_DEFAULT_DIMENSIONS.korkeus + 10)));
-  CONFIGURE_MENU.add(newButton(new Discover(),"Discover",color(255,255,255),new Point(0,height/4),BUTTON_DEFAULT_DIMENSIONS));
-  CONFIGURE_MENU.add(newButton(new MakeDiscoverable(),"Make Discoverable",color(255,255,255),new Point(0,height*1/2),BUTTON_DEFAULT_DIMENSIONS));
-  CONFIGURE_MENU.add(newButton(new Connect(),"Connect",color(255,255,255),new Point(0,height*3/4),BUTTON_DEFAULT_DIMENSIONS));
+  //CONFIGURE_MENU.add(newButton(new Discover(),"Discover",color(255,255,255),new Point(0,height/4),BUTTON_DEFAULT_DIMENSIONS));
+  //CONFIGURE_MENU.add(newButton(new MakeDiscoverable(),"Make Discoverable",color(255,255,255),new Point(0,height*1/2),BUTTON_DEFAULT_DIMENSIONS));
+  //CONFIGURE_MENU.add(newButton(new Connect(),"Connect",color(255,255,255),new Point(0,height*3/4),BUTTON_DEFAULT_DIMENSIONS));
   FLIGHT_MENU = new View();
   FLIGHT_MENU.add(new TextBox("Flying", new Point(width/2, height/2)));
   leftStick = new Joystick(new Point(width*1/4,height/2), JOYSTICK_DEFAULT_DIMENSIONS);
+  leftStick.setResting(new Point(leftStick.point.x,leftStick.point.y + (int)leftStick.radius));
   rightStick = new Joystick(new Point(width*3/4,height/2), JOYSTICK_DEFAULT_DIMENSIONS);
+  rightStick.setResting(new Point(rightStick.point));
   FLIGHT_MENU.add(leftStick);
   FLIGHT_MENU.add(rightStick);
   
@@ -70,8 +74,11 @@ void draw() {
   system.listen();
   system.display();
   system.execute();
-  String message = "$" + leftStick.toString() + "," + rightStick.toString();
-  println(message);
-  //myPort.write(message.getBytes());
+  //String message = "$" + leftStick.toString() + "," + rightStick.toString();
+  //if(flying) {
+  //  println(message);
+  //  myPort.write(message);
+  //}
+  
   //bt.broadcast(message.getBytes());
 }

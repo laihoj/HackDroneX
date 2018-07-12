@@ -172,13 +172,30 @@ class Joystick extends Widget {
   Point stick;
   float radius, innerRadius;
   PVector mouseDisplacement = new PVector(0,0);
+  Point resting;
   Joystick(Point point, Dimensions dimensions) {
     super(point,dimensions);
     this.point = point;
-    this.stick = new Point(point);
     this.dimensions = dimensions;
     this.radius = dimensions.leveys / 2;
     this.innerRadius = radius * 0.3;
+    this.stick = new Point(this.point.x, this.point.y + (int)this.radius);
+    this.resting = new Point(point);
+  }
+  Joystick(Point point, Dimensions dimensions, Point resting) {
+    super(point,dimensions);
+    this.point = point;
+    this.dimensions = dimensions;
+    this.radius = dimensions.leveys / 2;
+    this.innerRadius = radius * 0.3;
+    this.stick = new Point(this.point.x, this.point.y);
+    this.resting = resting;
+  }
+  void rest() {
+    this.stick = new Point(resting);
+  }
+  void setResting(Point point) {
+    this.resting = point;
   }
   void display() {
    stroke(0);
@@ -198,15 +215,24 @@ class Joystick extends Widget {
   }
   void onDrag(PVector drag) {
     this.stick.sub(drag);
+    output_state();
+    //String message = "$" + leftStick.toString() + "," + rightStick.toString();
+    //println(message);
+    //myPort.write(message);
   }
   void onRelease() {
-    this.stick = new Point(this.point);
+    this.rest();
+    output_state();
+    //this.stick = new Point(this.point.x, this.point.y + (int)this.radius);
+    //String message = "$" + this.RESTING;
+    //println(message);
+    //myPort.write(message);
   }
   String toString() {
     String res = "";
-    res += floor(-(min(max(point.x - stick.x,-radius),radius)  / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    res += (int)OUTPUT_RANGE - floor(-(min(max(point.y - stick.y,-radius),radius) / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
     res += ",";
-    res += floor(-(min(max(point.y - stick.y,-radius),radius) / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    res += floor(-(min(max(point.x - stick.x,-radius),radius)  / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
     return res;
   }
 }
