@@ -1,3 +1,4 @@
+/***********************************************************************************************/
 class Point {
   int x, y;
   Point(Point point) {
@@ -23,7 +24,9 @@ class Point {
     return sqrt((float)(Math.pow((that.x - this.x),2) + Math.pow((that.y - this.y),2)));
   }
 }
+/***********************************************************************************************/
 
+/***********************************************************************************************/
 class Dimensions {
   int leveys, korkeus;
   Dimensions(int leveys, int korkeus) {
@@ -31,8 +34,10 @@ class Dimensions {
     this.korkeus = korkeus;
   }
 }
+/***********************************************************************************************/
 
 
+/***********************************************************************************************/
 class View {
   ArrayList<Button> buttons = new ArrayList<Button>();
   ArrayList<Widget> widgets = new ArrayList<Widget>();
@@ -62,25 +67,31 @@ class View {
     }
   }
 }
+/***********************************************************************************************/
 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 abstract class Widget extends MouseObserver {
   Point point;
   Dimensions dimensions;
-  Widget() {
+  Widget(Point point, Dimensions dimensions) {
     system.mouseListener.add(this);
+    this.point = point;
+    this.dimensions = dimensions;
   }
   void display(){}
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
-class Button extends MouseObserver implements Command {
+
+/***********************************************************************************************/
+class Button extends Widget implements Command {
   Command command;
   String text;
   color c;
-  Point point;
-  Dimensions dimensions; 
-  boolean pressed = false;
-  
   Button(Command command, String text, color c, Point point, Dimensions dimensions) {
+    super(point,dimensions);
     this.command = command;
     this.text = text;
     this.c = c;
@@ -92,6 +103,9 @@ class Button extends MouseObserver implements Command {
     if(pressed) {
       fill(c);
       stroke(0);
+    } else if(hovering) {
+      fill(0,200,180);
+      noStroke();
     } else {
       fill(0,132,180);
       noStroke();
@@ -103,11 +117,11 @@ class Button extends MouseObserver implements Command {
     textSize(15);
     text(text,point.x + dimensions.leveys/2,point.y+dimensions.korkeus/2);
   }
-  Boolean target(PVector mouse) {
-    return mouse.x > this.point.x 
-        && mouse.x < this.point.x + this.dimensions.leveys 
-        && mouse.y > this.point.y 
-        && mouse.y < this.point.y + this.dimensions.korkeus;
+  Boolean isTarget() {
+    return mouseX > this.point.x 
+        && mouseX < this.point.x + this.dimensions.leveys 
+        && mouseY > this.point.y 
+        && mouseY < this.point.y + this.dimensions.korkeus;
   }
   void execute() {
     this.command.execute();
@@ -115,42 +129,51 @@ class Button extends MouseObserver implements Command {
   void queue() {
     system.commands.add(this);
   }
-  void click(PVector mouse) {
-    if(target(mouse)) {
-      this.pressed = true;
-    }
-  }
-  void release(PVector mouse, PVector dragment) {
-    if(target(mouse)) {
-      this.queue();
-    }
-    this.pressed = false;
+  void onHover() {}
+  void onPress() {}
+  void onDrag(PVector mouse) {}
+  void onRelease() {
+    this.queue();
   }
 }
+/***********************************************************************************************/
 
+
+/***********************************************************************************************/
 class TextBox extends Widget {
   String name;
   int font_size = DEFAULT_TEXT_SIZE;
   int modifier = LEFT;
   TextBox(String name, Point point) {
+    super(point,null);
     this.name = name;
-    this.point = point;
   }
+  
   void display() {
     textSize(font_size);
     textAlign(modifier);
     text(name, point.x, point.y);
   }
+  Boolean isTarget() {
+    return false;
+  }
+  void onHover() {}
+  void onPress() {}
+  void onDrag(PVector mouse) {}
+  void onRelease() {}
 }
+/***********************************************************************************************/
 
+
+/***********************************************************************************************/
 class Joystick extends Widget {
-  float angle, distance;
+  boolean springy;
   float spring = 0.95;
   Point stick;
-  float radius;
-  float innerRadius;
+  float radius, innerRadius;
   PVector mouseDisplacement = new PVector(0,0);
   Joystick(Point point, Dimensions dimensions) {
+    super(point,dimensions);
     this.point = point;
     this.stick = new Point(point);
     this.dimensions = dimensions;
@@ -162,27 +185,22 @@ class Joystick extends Widget {
    noFill();
    point(point.x,point.y);
    ellipse(point.x,point.y,dimensions.korkeus,dimensions.leveys);
-   if(selected) fill(125);
+   if(this.pressed) fill(125);
    ellipse(stick.x,stick.y,innerRadius,innerRadius);
    line(point.x, point.y, stick.x, stick.y);
   }
-  Boolean target(PVector mouse) {
-    return this.innerRadius / 2 > this.stick.dist(mouse);
+  Boolean isTarget() {
+    return this.innerRadius / 2 > sqrt((float)(Math.pow(this.stick.x - mouseX,2) + Math.pow(this.stick.y - mouseY,2)));
   }
-  void click(PVector mouse) {
-    super.click(mouse);
-    this.mouseDisplacement = PVector.sub(mouse,new PVector(this.stick.x,this.stick.y));
+  void onHover() {}
+  void onPress() {
+    this.mouseDisplacement = PVector.sub(new PVector(mouseX,mouseY),new PVector(this.stick.x,this.stick.y));
   }
-  void drag(PVector drag) {
-    if(this.selected) {
-      this.stick.sub(drag);
-    }
+  void onDrag(PVector drag) {
+    this.stick.sub(drag);
   }
-  void release(PVector mouse, PVector dragment) {
-    if(this.selected) {
-      this.stick = new Point(this.point);
-    }
-    super.release(mouse,dragment);
+  void onRelease() {
+    this.stick = new Point(this.point);
   }
   String toString() {
     String res = "";
@@ -192,50 +210,42 @@ class Joystick extends Widget {
     return res;
   }
 }
+/***********************************************************************************************/
 
-//class Slider extends Widget {
-//  int value = 20;
-//  Slider(Point point, Dimensions dimensions) {
-//    this.point = point;
-//    this.dimensions = dimensions;
-//  }
-//  void display() {
-//    noFill();
-//    stroke(0);
-//    rect(point.x,point.y,dimensions.leveys,dimensions.korkeus);
-//    fill(125);
-//    noStroke();
-//    rect(point.x, point.y - (dimensions.korkeus * value / 100),dimensions.leveys, dimensions.korkeus * value / 100);
-//  }
-//}
-//class main_screen extends Widget {
-//  main_screen(int x, int y, int wide,int tall) {
-//    this.x = x;
-//    this.y = y;
-//    this.wide = wide;
-//    this.tall = tall;
-//  }
-//  void display() {
-//    stroke(0);
-//    fill(255);
-//    rect(this.x,this.y,this.wide,this.tall);
-//    fill(0);
-//    text("main screen",this.x + this.wide/2 + 15, this.y + this.tall/2 + 15);
-//  }
-//}
 
-//class info_bar extends Widget {
-//  info_bar(int x, int y, int wide,int tall) {
-//    this.x = x;
-//    this.y = y;
-//    this.wide = wide;
-//    this.tall = tall;
-//  }
-//  void display() {
-//    stroke(0);
-//    fill(255);
-//    rect(this.x,this.y,this.wide,this.tall);
-//    fill(0);
-//    text("info bar",this.x + this.wide/2 + 15, this.y + this.tall/2 + 15);
-//  }
-//}
+
+/***********************************************************************************************/
+class CheckBox extends Widget {
+  boolean checked = false;
+  boolean pressed = false;
+  CheckBox(Point point, Dimensions dimensions) {
+    super(point,dimensions);
+  }
+  void check() {
+    this.checked = !this.checked;
+  }
+  void display() {
+    if(!checked) {
+      fill(255);
+      stroke(0);
+    } else {
+      fill(0);
+      noStroke();
+    }
+    rectMode(CORNER);
+    rect(point.x,point.y,dimensions.leveys,dimensions.korkeus);
+  }
+  Boolean isTarget() {
+    return mouseX > this.point.x 
+        && mouseX < this.point.x + this.dimensions.leveys 
+        && mouseY > this.point.y 
+        && mouseY < this.point.y + this.dimensions.korkeus;
+  }
+  void onHover() {}
+  void onPress() {}
+  void onDrag(PVector mouse) {}
+  void onRelease() {
+    this.check();
+  }
+}
+/***********************************************************************************************/

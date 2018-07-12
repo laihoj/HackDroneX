@@ -44,6 +44,7 @@ void setup() {
   system = new System();
   MAIN_MENU = new View();
   MAIN_MENU.add(new TextBox("Home", new Point(width/2, height/2)));
+  MAIN_MENU.add(new CheckBox(new Point(width/2, height/2 + 100), new Dimensions(100,100)));
   CONFIGURE_MENU = new View();
   CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, BUTTON_DEFAULT_DIMENSIONS.korkeus + 10)));
   CONFIGURE_MENU.add(newButton(new Discover(),"Discover",color(255,255,255),new Point(0,height/4),BUTTON_DEFAULT_DIMENSIONS));
@@ -71,6 +72,6 @@ void draw() {
   system.execute();
   String message = "$" + leftStick.toString() + "," + rightStick.toString();
   println(message);
-  myPort.write(message.getBytes());
+  //myPort.write(message.getBytes());
   //bt.broadcast(message.getBytes());
 }

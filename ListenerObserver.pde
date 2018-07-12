@@ -1,6 +1,12 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////
 interface Listener {
   void listen();
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/***********************************************************************************************/
 class MouseListener implements Listener {
   boolean wasMousePressed = false;
   PVector mousePos = new PVector(0,0);
@@ -13,13 +19,17 @@ class MouseListener implements Listener {
     this.observers.add(observer);
   }
   void listen() {
+    for(MouseObserver observer: this.observers) {
+      observer.hover(this.mousePos);
+    }
     if(mousePressed) {
       this.mousePos = new PVector(mouseX,mouseY);
+      
       if(!wasMousePressed) {
         this.dragment.setMag(0);
         this.prevMousePos = new PVector(mouseX,mouseY);
         for(MouseObserver observer: this.observers) {
-          observer.click(this.mousePos);
+          observer.press(this.mousePos);
         }
       }
       if(this.mousePos != this.prevMousePos) {
@@ -39,27 +49,56 @@ class MouseListener implements Listener {
     this.wasMousePressed = mousePressed;
   }
 }
+/***********************************************************************************************/
 
-abstract class MouseObserver {
-  boolean selected = false;
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+interface MouseActivities {
+  Boolean isTarget();
+  void onHover();
+  void onPress();
+  void onDrag(PVector mouse);
+  void onRelease();
+  
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+abstract class MouseObserver implements MouseActivities {
+  boolean pressed, hovering;
   PVector pos = new PVector(0,0);
-
   void connectListener(MouseListener listener) {
+    this.pressed = false;
+    this.hovering = false;
     listener.add(this);
   }
-  void click(PVector mouse) {
-    if(this.target(mouse)) {
-      this.selected = true;
+  void hover(PVector mouse) {
+    if(this.isTarget()) {
+      this.hovering = true;
+      this.onHover();
+    } else {
+      this.hovering = false;
+    }
+  }
+  void press(PVector mouse) {
+    if(this.isTarget()) {
+      this.pressed = true;
+      this.onPress();
     }
   }
   void drag(PVector mouse) {
-    if(this.selected) {
+    if(this.pressed) {
+      this.onDrag(mouse);
     }
   }
   void release(PVector mouse, PVector dragment) {
-    this.selected = false;
-  }
-  Boolean target(PVector mouse) {
-    return false;
+    if(this.pressed && this.isTarget()) {
+      this.onRelease();
+    }
+    this.pressed = false;    
   }
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////

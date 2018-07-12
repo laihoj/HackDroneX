@@ -5,7 +5,7 @@
 import ketai.net.bluetooth.*;
 import ketai.ui.*;
 import ketai.net.*;
-import oscP5.*;
+//import oscP5.*;
 
 ////Accelerometer necessities
 //import android.content.Context;
