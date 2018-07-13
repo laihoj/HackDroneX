@@ -65,14 +65,15 @@ void initialiseDeclarations() {
   
   MAIN_MENU = new View("Main menu view");
   MAIN_MENU.add(new TextBox("Home", new Point(width/2, height/2)));
-  MAIN_MENU.add(new CheckBox(new Point(width/2, height/2 + 100), new Dimensions(100,100)));
+  MAIN_MENU.add(new Slider(new Point(width/3, height/2), new Dimensions(100,400,20)));
   CONFIGURE_MENU = new View("Configuration view");
-  CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, BUTTON_DEFAULT_DIMENSIONS.korkeus + 10)));
+  CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, BUTTON_DEFAULT_DIMENSIONS.dims[1] + 10)));
   //CONFIGURE_MENU.add(newButton(new Discover(),"Discover",color(255,255,255),new Point(0,height/4),BUTTON_DEFAULT_DIMENSIONS));
   //CONFIGURE_MENU.add(newButton(new MakeDiscoverable(),"Make Discoverable",color(255,255,255),new Point(0,height*1/2),BUTTON_DEFAULT_DIMENSIONS));
   //CONFIGURE_MENU.add(newButton(new Connect(),"Connect",color(255,255,255),new Point(0,height*3/4),BUTTON_DEFAULT_DIMENSIONS));
   FLIGHT_MENU = new View("Flight menu view");
-  FLIGHT_MENU.add(new TextBox("Flying", new Point(width/2, height/2)));
+  FLIGHT_MENU.add(new CheckBox(new Point(width/2 - 100, height - 100), new Dimensions(50,50)));
+  FLIGHT_MENU.add(new CheckBox(new Point(width/2, height - 100), new Dimensions(50,50)));
   leftStick = new Joystick(new Point(width*1/4,height/2), JOYSTICK_DEFAULT_DIMS);
   leftStick.setResting(new Point(leftStick.point.x,leftStick.point.y + (int)leftStick.getRadius())).rest();
   rightStick = new Joystick(new Point(width*3/4,height/2), JOYSTICK_DEFAULT_DIMS);
@@ -83,9 +84,6 @@ void initialiseDeclarations() {
   ACTION_BAR = new View();
   system.action_bar = ACTION_BAR;
   system.active_view = MAIN_MENU;
-  //ACTION_BAR.add(newButton(new Configure(),"Configure",color(255,255,255),TOP_LEFT,BUTTON_DEFAULT_DIMENSIONS));
-  //ACTION_BAR.add(newButton(new Home(),"Main menu",color(255),TOP_ONE_THIRDS,BUTTON_DEFAULT_DIMENSIONS));
-  //ACTION_BAR.add(newButton(new Fly(),"Flight menu",color(255),TOP_TWO_THIRDS,BUTTON_DEFAULT_DIMENSIONS));
   ACTION_BAR.add(newButton(new ChangeView(CONFIGURE_MENU),"Configure menu",color(255,255,255),TOP_LEFT,BUTTON_DEFAULT_DIMENSIONS));
   ACTION_BAR.add(newButton(new ChangeView(MAIN_MENU),"Main menu",color(255),TOP_ONE_THIRDS,BUTTON_DEFAULT_DIMENSIONS));
   ACTION_BAR.add(newButton(new ChangeView(FLIGHT_MENU),"Flight menu",color(255),TOP_TWO_THIRDS,BUTTON_DEFAULT_DIMENSIONS));

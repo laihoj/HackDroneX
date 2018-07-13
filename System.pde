@@ -5,7 +5,6 @@ class System {
   View active_view;
   View action_bar;
   System() {
-    //this.state = 0;
     mouseListener = new MouseListener();
     views = new ArrayList<View>();
     commands = new ArrayList<Command>();
@@ -28,9 +27,6 @@ class System {
   void activate(View view) {
     this.active_view = view;
   }
-  //void activate(int state) {
-  //  this.state = state;
-  //}
   void display() {
     if(this.action_bar != null) {
       this.action_bar.display();
@@ -49,6 +45,8 @@ class System {
     this.commands = new ArrayList<Command>();
   }
 }
+
+/***********************************************************************************************/
 //Activates another view
 class ChangeView implements Command {
   View target;
@@ -63,7 +61,7 @@ class ChangeView implements Command {
     system.commands.add(this);
   }
 }
-
+/***********************************************************************************************/
 
 
 

@@ -1,4 +1,6 @@
-
+float limit(float value, float min, float max) {
+  return min(max,max(min,value));
+}
 
 void output_state() {
   String message = "$" + leftStick.toString() + "," + rightStick.toString();
