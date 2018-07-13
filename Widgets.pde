@@ -26,12 +26,17 @@ class Point {
 }
 /***********************************************************************************************/
 
+
 /***********************************************************************************************/
 class Dimensions {
+  int[] dims;
   int leveys, korkeus;
   Dimensions(int leveys, int korkeus) {
     this.leveys = leveys;
     this.korkeus = korkeus;
+  }
+  Dimensions(int... dims) {
+    this.dims = dims;
   }
 }
 /***********************************************************************************************/
@@ -174,49 +179,47 @@ class TextBox extends Widget {
 /***********************************************************************************************/
 
 
+//The dimensions.dim[0] refers to the diameter of the outer circle, [1] is the inner circle  
 /***********************************************************************************************/
 class Joystick extends Widget {
   boolean springy;
   float spring = 0.95;
   Point stick;
-  float radius, innerRadius;
+  //float radius, innerRadius;
   PVector mouseDisplacement = new PVector(0,0);
   Point resting;
   Joystick(Point point, Dimensions dimensions) {
     super(point,dimensions);
     this.point = point;
     this.dimensions = dimensions;
-    this.radius = dimensions.leveys / 2;
-    this.innerRadius = radius * 0.3;
-    this.stick = new Point(this.point.x, this.point.y + (int)this.radius);
+    //this.radius = dimensions.leveys / 2;
+    //this.innerRadius = radius * 0.3;
+    this.stick = new Point(this.point.x, this.point.y + (int)this.getRadius());
     this.resting = new Point(point);
   }
-  Joystick(Point point, Dimensions dimensions, Point resting) {
-    super(point,dimensions);
-    this.point = point;
-    this.dimensions = dimensions;
-    this.radius = dimensions.leveys / 2;
-    this.innerRadius = radius * 0.3;
-    this.stick = new Point(this.point.x, this.point.y);
-    this.resting = resting;
+  int getRadius() {
+    return dimensions.dims[0] / 2;
   }
   void rest() {
     this.stick = new Point(resting);
   }
-  void setResting(Point point) {
+  Joystick setResting(Point point) {
     this.resting = point;
+    return this;
   }
   void display() {
    stroke(0);
    noFill();
    point(point.x,point.y);
-   ellipse(point.x,point.y,dimensions.korkeus,dimensions.leveys);
+   //ellipse(point.x,point.y,dimensions.korkeus,dimensions.leveys);
+   ellipse(point.x,point.y,dimensions.dims[0],dimensions.dims[0]);
    if(this.pressed) fill(125);
-   ellipse(stick.x,stick.y,innerRadius,innerRadius);
+   //ellipse(stick.x,stick.y,innerRadius,innerRadius);
+   ellipse(stick.x,stick.y,dimensions.dims[1],dimensions.dims[1]);
    line(point.x, point.y, stick.x, stick.y);
   }
   Boolean isTarget() {
-    return this.innerRadius / 2 > sqrt((float)(Math.pow(this.stick.x - mouseX,2) + Math.pow(this.stick.y - mouseY,2)));
+    return this.dimensions.dims[1] / 2 > sqrt((float)(Math.pow(this.stick.x - mouseX,2) + Math.pow(this.stick.y - mouseY,2)));
   }
   void onHover() {}
   void onPress() {
@@ -239,9 +242,9 @@ class Joystick extends Widget {
   }
   String toString() {
     String res = "";
-    res += (int)OUTPUT_RANGE - floor(-(min(max(point.y - stick.y,-radius),radius) / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    res += (int)OUTPUT_RANGE - floor(-(min(max(point.y - stick.y,-getRadius()),getRadius()) / (float)getRadius() * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
     res += ",";
-    res += floor(-(min(max(point.x - stick.x,-radius),radius)  / (float)radius * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
+    res += floor(-(min(max(point.x - stick.x,-getRadius()),getRadius())  / (float)getRadius() * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
     return res;
   }
 }

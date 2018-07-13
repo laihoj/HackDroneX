@@ -6,44 +6,7 @@ void output_state() {
   myPort.write(message);
 }
 
-/***********************************************************************************************/
-class Configure extends ChangeView {
-  Configure() {
-    super(CONFIGURE_MENU);
-  }
-  void execute() {
-    super.execute();
-    //system.activate(CONFIGURE_MENU);
-  }
-}
-/***********************************************************************************************/
 
-
-/***********************************************************************************************/
-class Home extends ChangeView {
-  Home() {
-    super(MAIN_MENU);
-  }
-  void execute() {
-    super.execute();
-    //system.activate(MAIN_MENUING);
-  }
-}
-/***********************************************************************************************/
-
-
-
-/***********************************************************************************************/
-class Fly extends ChangeView {
-  Fly() {
-    super(FLIGHT_MENU);
-  }
-  void execute() {
-    super.execute();
-    //system.activate(FLYING);
-  }
-}
-/***********************************************************************************************/
 
 
 /***********************************************************************************************/
@@ -58,7 +21,7 @@ Button newButton(Command command, String text, color c, Point point, Dimensions 
 
 
 /*********
-Android utils
+Android utils - comment out when not testing on mobile device
 *********/
 
 

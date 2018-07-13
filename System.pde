@@ -1,5 +1,4 @@
 class System {
-  //int state;
   MouseListener mouseListener;
   ArrayList<View> views;
   ArrayList<Command> commands;
@@ -65,19 +64,8 @@ class ChangeView implements Command {
   }
 }
 
-//class ChangeState implements Command {
-//  int state;
-//  ChangeState(int state) {
-//    this.state = state;
-//  }
-//  void execute() {
-//    println("State changing from " + system.state + " to " + this.state);
-//    system.activate(state);
-//  }
-//  void queue() {
-//    system.commands.add(this);
-//  }
-//}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 interface Command {
