@@ -39,10 +39,19 @@ class Dimensions {
 
 /***********************************************************************************************/
 class View {
+  String name;
   ArrayList<Button> buttons = new ArrayList<Button>();
   ArrayList<Widget> widgets = new ArrayList<Widget>();
   View() {
     system.add(this);
+    this.name = "This view is anonymous";
+  }
+  View(String name) {
+    system.add(this);
+    this.name = name;
+  }
+  String toString() {
+    return this.name;
   }
   void add(Button button) {
     this.buttons.add(button);

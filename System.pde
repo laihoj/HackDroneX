@@ -1,11 +1,12 @@
 class System {
+  //int state;
   MouseListener mouseListener;
   ArrayList<View> views;
   ArrayList<Command> commands;
   View active_view;
   View action_bar;
   System() {
-    
+    //this.state = 0;
     mouseListener = new MouseListener();
     views = new ArrayList<View>();
     commands = new ArrayList<Command>();
@@ -28,6 +29,9 @@ class System {
   void activate(View view) {
     this.active_view = view;
   }
+  //void activate(int state) {
+  //  this.state = state;
+  //}
   void display() {
     if(this.action_bar != null) {
       this.action_bar.display();
@@ -47,15 +51,38 @@ class System {
   }
 }
 //Activates another view
-class Change_view implements Command {
+class ChangeView implements Command {
   View target;
-  Change_view(View target) {
+  ChangeView(View target) {
     this.target = target;
   }
   void execute() {
+    println("View changing from " + system.active_view.toString() + " to " + this.target);
     system.activate(target);
   }
   void queue() {
     system.commands.add(this);
   }
 }
+
+//class ChangeState implements Command {
+//  int state;
+//  ChangeState(int state) {
+//    this.state = state;
+//  }
+//  void execute() {
+//    println("State changing from " + system.state + " to " + this.state);
+//    system.activate(state);
+//  }
+//  void queue() {
+//    system.commands.add(this);
+//  }
+//}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+interface Command {
+  boolean executed = false;
+  void execute();
+  void queue();
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////

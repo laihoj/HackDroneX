@@ -1,10 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////
-interface Command {
-  boolean executed = false;
-  void execute();
-  void queue();
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void output_state() {
   String message = "$" + leftStick.toString() + "," + rightStick.toString();
@@ -13,28 +7,26 @@ void output_state() {
 }
 
 /***********************************************************************************************/
-class Configure implements Command {
-  Configure() {}
-  void execute() {
-    system.activate(CONFIGURE_MENU);
-    flying = false;
+class Configure extends ChangeView {
+  Configure() {
+    super(CONFIGURE_MENU);
   }
-  void queue() {
-    system.commands.add(this);
+  void execute() {
+    super.execute();
+    //system.activate(CONFIGURE_MENU);
   }
 }
 /***********************************************************************************************/
 
 
 /***********************************************************************************************/
-class Home implements Command {
-  Home() {}
-  void execute() {
-    system.activate(MAIN_MENU);
-    flying = false;
+class Home extends ChangeView {
+  Home() {
+    super(MAIN_MENU);
   }
-  void queue() {
-    system.commands.add(this);
+  void execute() {
+    super.execute();
+    //system.activate(MAIN_MENUING);
   }
 }
 /***********************************************************************************************/
@@ -42,14 +34,13 @@ class Home implements Command {
 
 
 /***********************************************************************************************/
-class Fly implements Command {
-  Fly() {}
-  void execute() {
-    system.activate(FLIGHT_MENU);
-    flying = true;
+class Fly extends ChangeView {
+  Fly() {
+    super(FLIGHT_MENU);
   }
-  void queue() {
-    system.commands.add(this);
+  void execute() {
+    super.execute();
+    //system.activate(FLYING);
   }
 }
 /***********************************************************************************************/
