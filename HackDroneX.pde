@@ -1,5 +1,5 @@
 System system;
-Serial myPort;
+Serial myPort = null;
 
 //think about where these should go
 Joystick leftStick;
@@ -10,7 +10,7 @@ Slider mainSlider;
 void setup() {
   system = new System();
   printArray(Serial.list());
-  myPort = new Serial(this, Serial.list()[0], 9600);
+  //myPort = new Serial(this, Serial.list()[0], 9600);
   frameRate(120);
   //orientation(LANDSCAPE);
   fullScreen();

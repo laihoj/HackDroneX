@@ -6,7 +6,12 @@ void output_state() {
   String message = "$" + leftStick.toString() + "," + rightStick.toString();
   //println("Left: " + leftStick.toString() + "," + " Right: " + rightStick.toString());
   println(message);
-  myPort.write(message);
+  if(myPort != null) {
+    myPort.write(message);
+  } else {
+  println("No serial port");
+  }
+  
 }
 
 void slider_output_state() {

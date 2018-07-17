@@ -23,6 +23,9 @@ class Point {
   float dist(PVector that) {
     return sqrt((float)(Math.pow((that.x - this.x),2) + Math.pow((that.y - this.y),2)));
   }
+  float heading(Point that) {
+    return new PVector(this.x - that.x,this.y - that.y).heading();
+  }
 }
 /***********************************************************************************************/
 
@@ -213,8 +216,6 @@ class Joystick extends Widget {
     super(point,dimensions);
     this.point = point;
     this.dimensions = dimensions;
-    //this.radius = dimensions.leveys / 2;
-    //this.innerRadius = radius * 0.3;
     this.stick = new Point(this.point.x, this.point.y + (int)this.getRadius());
     this.resting = new Point(point);
   }
@@ -232,12 +233,12 @@ class Joystick extends Widget {
    stroke(0);
    noFill();
    point(point.x,point.y);
-   //ellipse(point.x,point.y,dimensions.korkeus,dimensions.leveys);
    ellipse(point.x,point.y,dimensions.dims[0],dimensions.dims[0]);
    if(this.pressed) fill(125);
-   //ellipse(stick.x,stick.y,innerRadius,innerRadius);
    ellipse(stick.x,stick.y,dimensions.dims[1],dimensions.dims[1]);
-   line(point.x, point.y, stick.x, stick.y);
+   if(stick.dist(point) > dimensions.dims[1] / 2) {
+     line(point.x, point.y, stick.x + dimensions.dims[1] / 2 * cos(point.heading(stick)), stick.y + dimensions.dims[1] / 2 * sin(point.heading(stick)));
+   }
   }
   Boolean isTarget() {
     return this.dimensions.dims[1] / 2 > sqrt((float)(Math.pow(this.stick.x - mouseX,2) + Math.pow(this.stick.y - mouseY,2)));
@@ -249,9 +250,6 @@ class Joystick extends Widget {
   void onDrag(PVector drag) {
     this.stick.sub(drag);
     output_state();
-    //String message = "$" + leftStick.toString() + "," + rightStick.toString();
-    //println(message);
-    //myPort.write(message);
   }
   void onRelease() {
     this.rest();
