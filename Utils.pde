@@ -9,7 +9,11 @@ void output_state() {
   myPort.write(message);
 }
 
-
+void slider_output_state() {
+  String message = "$" + mainSlider.toString() + ",127,127,127";
+  println(message);
+  myPort.write(message);
+}
 
 
 /***********************************************************************************************/

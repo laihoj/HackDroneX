@@ -313,6 +313,9 @@ class Slider extends Widget {
   Slider(Point point, Dimensions dimensions) {
     super(point,dimensions);
   }
+  String toString() {
+    return str(floor(this.getValue() * OUTPUT_RANGE));
+  }
   float getValue() {
     return this.dimensions.dims[2] / (float)this.dimensions.dims[1];
   }
@@ -339,7 +342,10 @@ class Slider extends Widget {
   }
   void onDrag(PVector mouse) {
     setHeight(-mouseY + point.y + dimensions.dims[1]);
+    slider_output_state();
   }
-  void onRelease() {}
+  void onRelease() {
+    slider_output_state();
+  }
 }
 /***********************************************************************************************/

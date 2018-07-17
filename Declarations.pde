@@ -65,7 +65,8 @@ void initialiseDeclarations() {
   
   MAIN_MENU = new View("Main menu view");
   MAIN_MENU.add(new TextBox("Home", new Point(width/2, height/2)));
-  MAIN_MENU.add(new Slider(new Point(width/3, height/2), new Dimensions(100,400,20)));
+  mainSlider = new Slider(new Point(width/3, height/2), new Dimensions(100,400,0));
+  MAIN_MENU.add(mainSlider);
   CONFIGURE_MENU = new View("Configuration view");
   CONFIGURE_MENU.add(new TextBox("Configuration", new Point(width/2, BUTTON_DEFAULT_DIMENSIONS.dims[1] + 10)));
   //CONFIGURE_MENU.add(newButton(new Discover(),"Discover",color(255,255,255),new Point(0,height/4),BUTTON_DEFAULT_DIMENSIONS));
