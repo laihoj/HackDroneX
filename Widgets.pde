@@ -225,6 +225,12 @@ class Joystick extends Widget {
   void rest() {
     this.stick = new Point(resting);
   }
+  void restVertical() {
+    this.stick = new Point(this.stick.x, this.resting.y);
+  }
+  void restHorizontal() {
+    this.stick = new Point(this.resting.x, this.stick.y);
+  }
   Joystick setResting(Point point) {
     this.resting = point;
     return this;
@@ -261,6 +267,31 @@ class Joystick extends Widget {
     res += ",";
     res += floor(-(min(max(point.x - stick.x,-getRadius()),getRadius())  / (float)getRadius() * OUTPUT_RANGE/2.0) + OUTPUT_RANGE/2);
     return res;
+  }
+}
+
+class Joystick_Left extends Joystick {
+  Joystick_Left(Joystick joystick) {
+    super(joystick.point,joystick.dimensions);
+  }
+  Joystick_Left(Point point, Dimensions dimensions) {
+    super(point,dimensions);
+  }
+  void rest() {
+    restHorizontal();
+  }
+}
+
+class Joystick_Right extends Joystick {
+  Joystick_Right(Joystick joystick) {
+    super(joystick.point,joystick.dimensions);
+  }
+  Joystick_Right(Point point, Dimensions dimensions) {
+    super(point,dimensions);
+  }
+  void rest() {
+    restHorizontal();
+    restVertical();
   }
 }
 /***********************************************************************************************/

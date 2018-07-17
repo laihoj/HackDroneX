@@ -2,8 +2,8 @@ System system;
 Serial myPort = null;
 
 //think about where these should go
-Joystick leftStick;
-Joystick rightStick;
+Joystick_Left leftStick;
+Joystick_Right rightStick;
 Slider mainSlider;
 
 

@@ -75,9 +75,9 @@ void initialiseDeclarations() {
   FLIGHT_MENU = new View("Flight menu view");
   FLIGHT_MENU.add(new CheckBox(new Point(width/2 - 100, height - 100), new Dimensions(50,50)));
   FLIGHT_MENU.add(new CheckBox(new Point(width/2, height - 100), new Dimensions(50,50)));
-  leftStick = new Joystick(new Point(width*1/4,height/2), JOYSTICK_DEFAULT_DIMS);
+  leftStick = new Joystick_Left(new Point(width*1/4,height/2), JOYSTICK_DEFAULT_DIMS);
   leftStick.setResting(new Point(leftStick.point.x,leftStick.point.y + (int)leftStick.getRadius())).rest();
-  rightStick = new Joystick(new Point(width*3/4,height/2), JOYSTICK_DEFAULT_DIMS);
+  rightStick = new Joystick_Right(new Point(width*3/4,height/2), JOYSTICK_DEFAULT_DIMS);
   rightStick.setResting(new Point(rightStick.point)).rest();
   FLIGHT_MENU.add(leftStick);
   FLIGHT_MENU.add(rightStick);
